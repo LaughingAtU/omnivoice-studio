@@ -3,54 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Omni Voice Studio</title>
+    <title>Omni Voice Studio - Free AI Clone</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; text-align: center; background-color: #f4f7f6; color: #333; }
-        h1 { color: #2c3e50; }
-        textarea { width: 100%; height: 120px; padding: 10px; margin-top: 15px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; resize: vertical; box-sizing: border-box; }
-        .btn { background-color: #3498db; color: white; border: none; padding: 12px 24px; margin: 15px 5px; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background 0.3s; }
-        .btn:hover { background-color: #2980b9; }
-        .btn.record { background-color: #e74c3c; }
-        .btn.record:hover { background-color: #c0392b; }
+        body { background-color: #121212; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: #1e1e1e; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        h2 { color: #00adb5; margin-top: 0; }
+        .input-group { text-align: left; margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-size: 14px; color: #ccc; }
+        input[type="file"], textarea, select { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #333; background: #2a2a2a; color: #fff; box-sizing: border-box; }
+        textarea { resize: vertical; }
+        button { background-color: #00adb5; color: white; border: none; padding: 14px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; width: 100%; transition: 0.3s; }
+        button:hover { background-color: #008c93; }
+        button:disabled { background-color: #555; cursor: not-allowed; }
+        #resultContainer { display: none; margin-top: 25px; padding-top: 20px; border-top: 1px solid #333; }
+        audio { width: 100%; outline: none; margin-bottom: 15px; }
+        .download-btn { display: inline-block; background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 14px; }
+        #statusText { color: #ff9800; font-size: 14px; margin-top: 15px; font-style: italic; }
     </style>
 </head>
 <body>
-    <h1>Omni Voice Studio 🎙️</h1>
-    <p>Ubah teks menjadi suara, atau suara menjadi teks!</p>
-    <textarea id="textInput" placeholder="Ketik teks di sini atau tekan tombol rekam untuk mulai bicara..."></textarea>
-    <div>
-        <button class="btn" onclick="speakText()">🔊 Bacakan Teks</button>
-        <button class="btn record" onclick="startRecording()">🔴 Rekam Suara</button>
-    </div>
-    <script>
-        function speakText() {
-            const text = document.getElementById("textInput").value;
-            if (!text) return alert("Ketik teks terlebih dahulu!");
-            const speech = new SpeechSynthesisUtterance(text);
-            speech.lang = 'id-ID'; // Menggunakan aksen bahasa Indonesia
-            window.speechSynthesis.speak(speech);
-        }
+    <div class="container">
+        <h2>Omni Voice Studio 🎙️</h2>
+        <p style="color: #888; font-size: 14px;">100% Gratis - Menggunakan Open-Source AI (Coqui XTTS)</p>
 
-        function startRecording() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) return alert("Browser Anda tidak mendukung fitur rekam suara.");
-            
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'id-ID';
-            document.getElementById("textInput").placeholder = "Mendengarkan...";
-            
-            recognition.start();
-            
-            recognition.onresult = function(event) {
-                document.getElementById("textInput").value = event.results[0][0].transcript;
-                document.getElementById("textInput").placeholder = "Ketik teks di sini atau tekan tombol rekam untuk mulai bicara...";
-            };
-            
-            recognition.onerror = function(event) {
-                alert("Gagal merekam: " + event.error);
-                document.getElementById("textInput").placeholder = "Ketik teks di sini atau tekan tombol rekam untuk mulai bicara...";
-            };
-        }
+        <div class="input-group">
+            <label>1. Upload Suara Anda (Durasi 5-10 detik, file WAV/MP3 jernih):</label>
+            <input type="file" id="audioInput" accept="audio/*">
+        </div>
+
+        <div class="input-group">
+            <label>2. Pilih Bahasa:</label>
+            <select id="langInput">
+                <option value="id">Bahasa Indonesia</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>3. Teks yang ingin diucapkan:</label>
+            <textarea id="textInput" rows="4" placeholder="Ketik teks yang ingin diubah menjadi suara Anda..."></textarea>
+        </div>
+
+        <button id="generateBtn">Tiru Suaraku Sekarang</button>
+        <p id="statusText"></p>
+
+        <div id="resultContainer">
+            <label style="text-align: left; color: #00adb5;">Hasil Audio:</label>
+            <audio id="audioPlayer" controls></audio>
+            <br>
+            <a id="downloadLink" class="download-btn" href="#" download="suara-kloning.wav">⬇️ Download Audio</a>
+        </div>
+    </div>
+
+    <!-- Script memanggil Gradio Client dari CDN untuk terhubung ke Hugging Face -->
+    <script type="module">
+        import { client } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
+
+        document.getElementById('generateBtn').addEventListener('click', async () => {
+            const audioFile = document.getElementById('audioInput').files[0];
+            const text = document.getElementById('textInput').value;
+            const lang = document.getElementById('langInput').value;
+            const btn = document.getElementById('generateBtn');
+            const status = document.getElementById('statusText');
+            const resultContainer = document.getElementById('resultContainer');
+            const audioPlayer = document.getElementById('audioPlayer');
+            const downloadLink = document.getElementById('downloadLink');
+
+            if (!audioFile || !text) {
+                alert("Harap upload file rekaman suara Anda dan masukkan teks!");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "⏳ Memproses...";
+            status.innerText = "Sedang mengirim data ke server AI publik (bisa memakan waktu 1-3 menit jika server sedang antre)...";
+            resultContainer.style.display = "none";
+
+            try {
+                // Terhubung ke server publik Hugging Face (Coqui XTTS)
+                const app = await client("coqui/xtts");
+
+                // Mengirim parameter: Teks, Bahasa, File Audio, dll sesuai struktur API mereka
+                const result = await app.predict("/predict", [
+                    text,      
+                    lang,      
+                    audioFile, 
+                    null,      
+                    false,     
+                    true,      
+                    false,     
+                ]);
+
+                // Menangkap hasil URL audio yang digenerate oleh AI
+                const audioUrl = result.data[0].url;
+
+                audioPlayer.src = audioUrl;
+                downloadLink.href = audioUrl;
+                resultContainer.style.display = "block";
+                status.innerText = "✅ Berhasil! Silakan putar atau download suara Anda.";
+            } catch (error) {
+                status.innerText = "❌ Gagal: " + error.message + " (Server publik Hugging Face mungkin sedang offline/penuh).";
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Tiru Suaraku Sekarang";
+            }
+        });
     </script>
 </body>
 </html>
