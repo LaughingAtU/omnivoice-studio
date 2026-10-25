@@ -3,111 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Omni Voice Studio - Free AI Clone</title>
+    <title>Omni Voice Studio - Ultimate Free AI Clone</title>
     <style>
-        body { background-color: #121212; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; }
-        .container { max-width: 600px; margin: auto; background: #1e1e1e; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        h2 { color: #00adb5; margin-top: 0; }
-        .input-group { text-align: left; margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-size: 14px; color: #ccc; }
-        input[type="file"], textarea, select { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #333; background: #2a2a2a; color: #fff; box-sizing: border-box; }
+        body { background-color: #0f0f13; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; }
+        .container { max-width: 650px; margin: auto; background: #1a1a24; padding: 25px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.7); border: 1px solid #2a2a35; }
+        h2 { color: #00e5ff; margin-top: 0; }
+        .badge { background: #00adb5; color: #000; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .input-group { text-align: left; margin-bottom: 18px; background: #222230; padding: 15px; border-radius: 8px; }
+        label { display: block; margin-bottom: 8px; font-size: 14px; color: #ddd; font-weight: 600; }
+        .sub-label { font-size: 12px; color: #888; margin-top: -5px; margin-bottom: 8px; display: block; }
+        input[type="file"], input[type="text"], textarea, select { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #3a3a4c; background: #14141d; color: #fff; box-sizing: border-box; font-size: 14px; }
         textarea { resize: vertical; }
-        button { background-color: #00adb5; color: white; border: none; padding: 14px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; width: 100%; transition: 0.3s; }
-        button:hover { background-color: #008c93; }
-        button:disabled { background-color: #555; cursor: not-allowed; }
-        #resultContainer { display: none; margin-top: 25px; padding-top: 20px; border-top: 1px solid #333; }
-        audio { width: 100%; outline: none; margin-bottom: 15px; }
-        .download-btn { display: inline-block; background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 14px; }
-        #statusText { color: #ff9800; font-size: 14px; margin-top: 15px; font-style: italic; }
+        button { background: linear-gradient(90deg, #00adb5, #00e5ff); color: #000; border: none; padding: 15px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; width: 100%; transition: 0.3s; margin-top: 10px; }
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        button:disabled { background: #444; color: #888; cursor: not-allowed; transform: none; }
+        #resultContainer { display: none; margin-top: 25px; padding: 20px; background: #142824; border: 1px solid #00adb5; border-radius: 8px; }
+        audio { width: 100%; outline: none; margin-bottom: 15px; margin-top: 10px; }
+        .download-btn { display: inline-block; background-color: #00e676; color: #000; font-weight: bold; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-size: 14px; }
+        #statusBox { background: #14141d; border-left: 4px solid #ff9800; padding: 12px; margin-top: 15px; text-align: left; font-size: 13px; color: #ddd; display: none; white-space: pre-wrap; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Omni Voice Studio 🎙️</h2>
-        <p style="color: #888; font-size: 14px;">100% Gratis - Menggunakan Open-Source AI (Coqui XTTS)</p>
+        <h2>Omni Voice Studio 🎙️ <span class="badge">PRO BYPASS</span></h2>
+        <p style="color: #999; font-size: 13px;">Auto M4A-to-WAV Converter + Multi-Server Open Source AI</p>
 
         <div class="input-group">
-            <label>1. Upload Suara Anda (Durasi 5-10 detik, file WAV/MP3 jernih):</label>
+            <label>1. Pilih Server Mesin AI (Gratis):</label>
+            <span class="sub-label">Jika Server 1 penuh/error 503, ganti ke Server 2 atau 3!</span>
+            <select id="serverSelect" onchange="toggleCustomServer()">
+                <option value="mrfakename/E2-F5-TTS">Server 1: F5-TTS (Sangat Cepat & Mirip - Rekomendasi)</option>
+                <option value="SWivid/F5-TTS">Server 2: F5-TTS Official</option>
+                <option value="idiap/coqui-ai-TTS">Server 3: Coqui XTTS v2 (Idiap Mirror)</option>
+                <option value="custom">⚙️ Masukkan Nama Server Hugging Face Sendiri...</option>
+            </select>
+            <input type="text" id="customServer" placeholder="Contoh: nama-user/nama-space-tts" style="display:none; margin-top:10px;">
+        </div>
+
+        <div class="input-group">
+            <label>2. Upload Suara Anda (Bebas M4A / MP3 / WAV, durasi 5-15 detik):</label>
+            <span class="sub-label">Sistem akan otomatis mengubah file .m4a Anda menjadi .wav agar diterima AI.</span>
             <input type="file" id="audioInput" accept="audio/*">
         </div>
 
         <div class="input-group">
-            <label>2. Pilih Bahasa:</label>
-            <select id="langInput">
-                <option value="id">Bahasa Indonesia</option>
-                <option value="en">English</option>
-            </select>
-        </div>
-
-        <div class="input-group">
             <label>3. Teks yang ingin diucapkan:</label>
-            <textarea id="textInput" rows="4" placeholder="Ketik teks yang ingin diubah menjadi suara Anda..."></textarea>
+            <textarea id="textInput" rows="4">Tahukah kalian film box office Warner Bros. yang menginspirasi Star Wars – yaitu Dune – banyak terinfluence oleh Islam?</textarea>
         </div>
 
-        <button id="generateBtn">Tiru Suaraku Sekarang</button>
-        <p id="statusText"></p>
+        <button id="generateBtn">🚀 Konversi Audio & Tiru Suaraku</button>
+        <div id="statusBox"></div>
 
         <div id="resultContainer">
-            <label style="text-align: left; color: #00adb5;">Hasil Audio:</label>
+            <label style="color: #00e676; text-align: center;">✅ Berhasil! Ini Suara Kloningan Anda:</label>
             <audio id="audioPlayer" controls></audio>
             <br>
-            <a id="downloadLink" class="download-btn" href="#" download="suara-kloning.wav">⬇️ Download Audio</a>
+            <a id="downloadLink" class="download-btn" href="#" download="omni-voice-clone.wav">⬇️ Download Audio (WAV)</a>
         </div>
     </div>
 
-    <!-- Script memanggil Gradio Client dari CDN untuk terhubung ke Hugging Face -->
     <script type="module">
-        import { client } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
+        import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
 
-        document.getElementById('generateBtn').addEventListener('click', async () => {
-            const audioFile = document.getElementById('audioInput').files[0];
-            const text = document.getElementById('textInput').value;
-            const lang = document.getElementById('langInput').value;
-            const btn = document.getElementById('generateBtn');
-            const status = document.getElementById('statusText');
-            const resultContainer = document.getElementById('resultContainer');
-            const audioPlayer = document.getElementById('audioPlayer');
-            const downloadLink = document.getElementById('downloadLink');
-
-            if (!audioFile || !text) {
-                alert("Harap upload file rekaman suara Anda dan masukkan teks!");
-                return;
-            }
-
-            btn.disabled = true;
-            btn.innerText = "⏳ Memproses...";
-            status.innerText = "Sedang mengirim data ke server AI publik (bisa memakan waktu 1-3 menit jika server sedang antre)...";
-            resultContainer.style.display = "none";
-
-            try {
-                // Terhubung ke server publik Hugging Face (Coqui XTTS)
-                const app = await client("coqui/xtts");
-
-                // Mengirim parameter: Teks, Bahasa, File Audio, dll sesuai struktur API mereka
-                const result = await app.predict("/predict", [
-                    text,      
-                    lang,      
-                    audioFile, 
-                    null,      
-                    false,     
-                    true,      
-                    false,     
-                ]);
-
-                // Menangkap hasil URL audio yang digenerate oleh AI
-                const audioUrl = result.data[0].url;
-
-                audioPlayer.src = audioUrl;
-                downloadLink.href = audioUrl;
-                resultContainer.style.display = "block";
-                status.innerText = "✅ Berhasil! Silakan putar atau download suara Anda.";
-            } catch (error) {
-                status.innerText = "❌ Gagal: " + error.message + " (Server publik Hugging Face mungkin sedang offline/penuh).";
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "Tiru Suaraku Sekarang";
-            }
-        });
-    </script>
-</body>
-</html>
+        window.toggleCustomServer = function() {
+            const select = document.getElementById('serverSelect').value;
+            document.getElementById('customServer').style.display = (
