@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omni Voice Studio</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; text-align: center; background-color: #f4f7f6; color: #333; }
+        h1 { color: #2c3e50; }
+        textarea { width: 100%; height: 120px; padding: 10px; margin-top: 15px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; resize: vertical; box-sizing: border-box; }
+        .btn { background-color: #3498db; color: white; border: none; padding: 12px 24px; margin: 15px 5px; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background 0.3s; }
+        .btn:hover { background-color: #2980b9; }
+        .btn.record { background-color: #e74c3c; }
+        .btn.record:hover { background-color: #c0392b; }
+    </style>
+</head>
+<body>
+    <h1>Omni Voice Studio 🎙️</h1>
+    <p>Ubah teks menjadi suara, atau suara menjadi teks!</p>
+    <textarea id="textInput" placeholder="Ketik teks di sini atau tekan tombol rekam untuk mulai bicara..."></textarea>
+    <div>
+        <button class="btn" onclick="speakText()">🔊 Bacakan Teks</button>
+        <button class="btn record" onclick="startRecording()">🔴 Rekam Suara</button>
+    </div>
+    <script>
+        function speakText() {
+            const text = document.getElementById("textInput").value;
+            if (!text) return alert("Ketik teks terlebih dahulu!");
+            const speech = new SpeechSynthesisUtterance(text);
+            speech.lang = 'id-ID'; // Menggunakan aksen bahasa Indonesia
+            window.speechSynthesis.speak(speech);
+        }
+
+        function startRecording() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) return alert("Browser Anda tidak mendukung fitur rekam suara.");
+            
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'id-ID';
+            document.getElementById("textInput").placeholder = "Mendengarkan...";
+            
+            recognition.start();
+            
+            recognition.onresult = function(event) {
+                document.getElementById("textInput").value = event.results[0][0].transcript;
+                document.getElementById("textInput").placeholder = "Ketik teks di sini atau tekan tombol rekam untuk mulai bicara...";
+            };
+            
+            recognition.onerror = function(event) {
+                alert("Gagal merekam: " + event.error);
+                document.getElementById("textInput").placeholder = "Ketik teks di sini atau tekan tombol rekam untuk mulai bicara...";
+            };
+        }
+    </script>
+</body>
+</html>
