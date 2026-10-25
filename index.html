@@ -3,68 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Omni Voice Studio - Ultimate Free AI Clone</title>
+    <title>Omni Voice Studio - Free AI Clone</title>
     <style>
-        body { background-color: #0f0f13; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; }
-        .container { max-width: 650px; margin: auto; background: #1a1a24; padding: 25px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.7); border: 1px solid #2a2a35; }
-        h2 { color: #00e5ff; margin-top: 0; }
-        .badge { background: #00adb5; color: #000; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
-        .input-group { text-align: left; margin-bottom: 18px; background: #222230; padding: 15px; border-radius: 8px; }
-        label { display: block; margin-bottom: 8px; font-size: 14px; color: #ddd; font-weight: 600; }
-        .sub-label { font-size: 12px; color: #888; margin-top: -5px; margin-bottom: 8px; display: block; }
-        input[type="file"], input[type="text"], textarea, select { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #3a3a4c; background: #14141d; color: #fff; box-sizing: border-box; font-size: 14px; }
+        body { background-color: #121212; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: #1e1e1e; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        h2 { color: #00adb5; margin-top: 0; }
+        .input-group { text-align: left; margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-size: 14px; color: #ccc; }
+        input[type="file"], textarea, select { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #333; background: #2a2a2a; color: #fff; box-sizing: border-box; }
         textarea { resize: vertical; }
-        button { background: linear-gradient(90deg, #00adb5, #00e5ff); color: #000; border: none; padding: 15px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; width: 100%; transition: 0.3s; margin-top: 10px; }
-        button:hover { opacity: 0.9; transform: translateY(-1px); }
-        button:disabled { background: #444; color: #888; cursor: not-allowed; transform: none; }
-        #resultContainer { display: none; margin-top: 25px; padding: 20px; background: #142824; border: 1px solid #00adb5; border-radius: 8px; }
-        audio { width: 100%; outline: none; margin-bottom: 15px; margin-top: 10px; }
-        .download-btn { display: inline-block; background-color: #00e676; color: #000; font-weight: bold; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-size: 14px; }
-        #statusBox { background: #14141d; border-left: 4px solid #ff9800; padding: 12px; margin-top: 15px; text-align: left; font-size: 13px; color: #ddd; display: none; white-space: pre-wrap; }
+        button { background-color: #00adb5; color: white; border: none; padding: 14px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; width: 100%; transition: 0.3s; }
+        button:hover { background-color: #008c93; }
+        
+        /* CSS Animasi Loading */
+        .loading-area { display: none; margin-top: 20px; padding: 15px; background: #222; border-radius: 8px; border: 1px dashed #00adb5; }
+        .spinner { border: 4px solid rgba(255,255,255,0.1); border-left-color: #00adb5; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loading-text { color: #00adb5; font-size: 15px; font-weight: bold; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+
+        #resultContainer { display: none; margin-top: 25px; padding-top: 20px; border-top: 1px solid #333; }
+        audio { width: 100%; outline: none; margin-bottom: 15px; }
+        .download-btn { display: inline-block; background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 14px; }
+        #errorText { background: #331a1a; color: #ff4d4d; padding: 10px; border-radius: 6px; font-size: 14px; margin-top: 15px; display: none; text-align: left; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Omni Voice Studio 🎙️ <span class="badge">PRO BYPASS</span></h2>
-        <p style="color: #999; font-size: 13px;">Auto M4A-to-WAV Converter + Multi-Server Open Source AI</p>
+        <h2>Omni Voice Studio 🎙️</h2>
+        <p style="color: #888; font-size: 14px;">100% Gratis - Menggunakan Open-Source AI (Coqui XTTS)</p>
 
         <div class="input-group">
-            <label>1. Pilih Server Mesin AI (Gratis):</label>
-            <span class="sub-label">Jika Server 1 penuh/error 503, ganti ke Server 2 atau 3!</span>
-            <select id="serverSelect" onchange="toggleCustomServer()">
-                <option value="mrfakename/E2-F5-TTS">Server 1: F5-TTS (Sangat Cepat & Mirip - Rekomendasi)</option>
-                <option value="SWivid/F5-TTS">Server 2: F5-TTS Official</option>
-                <option value="idiap/coqui-ai-TTS">Server 3: Coqui XTTS v2 (Idiap Mirror)</option>
-                <option value="custom">⚙️ Masukkan Nama Server Hugging Face Sendiri...</option>
-            </select>
-            <input type="text" id="customServer" placeholder="Contoh: nama-user/nama-space-tts" style="display:none; margin-top:10px;">
-        </div>
-
-        <div class="input-group">
-            <label>2. Upload Suara Anda (Bebas M4A / MP3 / WAV, durasi 5-15 detik):</label>
-            <span class="sub-label">Sistem akan otomatis mengubah file .m4a Anda menjadi .wav agar diterima AI.</span>
+            <label>1. Upload Suara Anda (WAV/MP3, max 10 detik):</label>
             <input type="file" id="audioInput" accept="audio/*">
         </div>
 
         <div class="input-group">
-            <label>3. Teks yang ingin diucapkan:</label>
-            <textarea id="textInput" rows="4">Tahukah kalian film box office Warner Bros. yang menginspirasi Star Wars – yaitu Dune – banyak terinfluence oleh Islam?</textarea>
+            <label>2. Pilih Bahasa Teks:</label>
+            <select id="langInput">
+                <option value="id">Bahasa Indonesia</option>
+                <option value="en">English</option>
+            </select>
         </div>
 
-        <button id="generateBtn">🚀 Konversi Audio & Tiru Suaraku</button>
-        <div id="statusBox"></div>
+        <div class="input-group">
+            <label>3. Teks yang ingin diucapkan:</label>
+            <textarea id="textInput" rows="4" placeholder="Ketik teks yang ingin diubah menjadi suara Anda..."></textarea>
+        </div>
 
+        <button id="generateBtn">Konversi Audio & Tiru Suaraku</button>
+        
+        <!-- AREA LOADING -->
+        <div id="loadingArea" class="loading-area">
+            <div class="spinner"></div>
+            <div class="loading-text" id="loadingStatus">Mempersiapkan data...</div>
+            <p style="color: #aaa; font-size: 12px; margin-top: 8px;">Proses kloning AI sedang berjalan.<br>Bisa memakan waktu 1-3 menit, mohon jangan tutup halaman ini.</p>
+        </div>
+
+        <!-- AREA ERROR -->
+        <div id="errorText"></div>
+
+        <!-- AREA HASIL -->
         <div id="resultContainer">
-            <label style="color: #00e676; text-align: center;">✅ Berhasil! Ini Suara Kloningan Anda:</label>
+            <label style="text-align: left; color: #00adb5; display: block; margin-bottom: 10px;">✅ Berhasil! Putar hasil audio Anda:</label>
             <audio id="audioPlayer" controls></audio>
             <br>
-            <a id="downloadLink" class="download-btn" href="#" download="omni-voice-clone.wav">⬇️ Download Audio (WAV)</a>
+            <a id="downloadLink" class="download-btn" href="#" download="suara-kloning.wav">⬇️ Download Audio (WAV)</a>
         </div>
     </div>
 
+    <!-- Script memanggil Gradio Client -->
     <script type="module">
-        import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
+        import { client } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
 
-        window.toggleCustomServer = function() {
-            const select = document.getElementById('serverSelect').value;
-            document.getElementById('customServer').style.display = (
+        document.getElementById('generateBtn').addEventListener('click', async () => {
+            const audioFile = document.getElementById('audioInput').files[0];
+            const text = document.getElementById('textInput').value;
+            const lang = document.getElementById('langInput').value;
+            
+            const btn = document.getElementById('generateBtn');
+            const loadingArea = document.getElementById('loadingArea');
+            const loadingStatus = document.getElementById('loadingStatus');
+            const errorText = document.getElementById('errorText');
+            const resultContainer = document.getElementById('resultContainer');
+            const audioPlayer = document.getElementById('audioPlayer');
+            const downloadLink = document.getElementById('downloadLink');
+
+            // Validasi Input
+            if (!audioFile || !text) {
+                alert("Peringatan: Harap upload file rekaman suara Anda dan ketikkan teks terlebih dahulu!");
+                return;
+            }
+
+            // Tampilkan Animasi Loading, Sembunyikan Tombol
+            btn.style.display = "none";
+            loadingArea.style.display = "block";
+            errorText.style.display = "none";
+            resultContainer.style.display = "none";
+            
+            try {
+                loadingStatus.innerText = "Menghubungkan ke Server AI Hugging Face...";
+                
+                // Terhubung ke server
+                const app = await client("coqui/xtts");
+                
+                loadingStatus.innerText = "Server terhubung! AI sedang menyalin suara Anda (antrean server)...";
+
+                // Mengirim ke model XTTS
+                const result = await app.predict("/predict", [
+                    text,      
+                    lang,      
+                    audioFile, 
+                    null,      
+                    false,     
+                    true,      
+                    false,     
+                ]);
+
+                // Mengambil URL hasil
+                const audioUrl = result.data[0].url;
+                audioPlayer.src = audioUrl;
+                downloadLink.href = audioUrl;
+                
+                // Sembunyikan Loading, Tampilkan Hasil
+                loadingArea.style.display = "none";
+                resultContainer.style.display = "block";
+                
+                // Kembalikan tombol
+                btn.style.display = "block";
+                btn.innerText = "Buat Suara Lagi";
+                
+            } catch (error) {
+                console.error(error);
+                // Sembunyikan Loading, Tampilkan Error
+                loadingArea.style.display = "none";
+                btn.style.display = "block";
+                errorText.style.display = "block";
+                errorText.innerHTML = `<b>❌ Gagal memproses:</b> Server AI publik mungkin sedang offline atau terlalu banyak antrean.<br><br><b>Detail teknis:</b> ${error.message}<br><br><i>Saran: Coba perkecil ukuran file rekaman suara Anda (maksimal 5 detik) atau coba lagi dalam beberapa menit.</i>`;
+            }
+        });
+    </script>
+</body>
+</html>
