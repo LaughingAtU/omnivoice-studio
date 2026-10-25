@@ -3,61 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Omni Voice Studio - Free AI Clone</title>
+    <title>Omni Voice Studio V3 - Ultimate</title>
     <style>
-        body { background-color: #121212; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; }
-        .container { max-width: 600px; margin: auto; background: #1e1e1e; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        h2 { color: #00adb5; margin-top: 0; }
-        .input-group { text-align: left; margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-size: 14px; color: #ccc; }
-        input[type="file"], textarea, select { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #333; background: #2a2a2a; color: #fff; box-sizing: border-box; }
+        body { background-color: #0b0c10; color: #c5c6c7; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 15px; margin: 0; }
+        .container { max-width: 680px; margin: 20px auto; background: #1f2833; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 2px solid #45a29e; }
+        .badge { background: #66fcf1; color: #0b0c10; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; display: inline-block; margin-bottom: 10px; }
+        h2 { color: #66fcf1; margin: 0 0 5px 0; }
+        .sub { color: #888; font-size: 13px; margin-bottom: 20px; }
+        .input-group { text-align: left; margin-bottom: 15px; background: #0b0c10; padding: 15px; border-radius: 8px; border: 1px solid #333; }
+        label { display: block; margin-bottom: 8px; font-size: 13px; color: #66fcf1; font-weight: bold; }
+        input[type="file"], input[type="text"], textarea, select { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #45a29e; background: #1f2833; color: #fff; box-sizing: border-box; font-size: 14px; }
         textarea { resize: vertical; }
-        button { background-color: #00adb5; color: white; border: none; padding: 14px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; width: 100%; transition: 0.3s; }
-        button:hover { background-color: #008c93; }
+        .btn-main { background: #66fcf1; color: #0b0c10; border: none; padding: 15px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; width: 100%; transition: 0.3s; margin-top: 10px; }
+        .btn-main:hover { background: #45a29e; color: #fff; }
+        .btn-scan { background: #45a29e; color: #fff; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-size: 12px; margin-top: 8px; }
         
-        /* CSS Animasi Loading */
-        .loading-area { display: none; margin-top: 20px; padding: 15px; background: #222; border-radius: 8px; border: 1px dashed #00adb5; }
-        .spinner { border: 4px solid rgba(255,255,255,0.1); border-left-color: #00adb5; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px auto; }
+        /* Loading & Log */
+        .loading-area { display: none; margin-top: 20px; padding: 15px; background: #0b0c10; border-radius: 8px; border: 1px dashed #66fcf1; }
+        .spinner { border: 4px solid rgba(255,255,255,0.1); border-left-color: #66fcf1; border-radius: 50%; width: 35px; height: 35px; animation: spin 1s linear infinite; margin: 0 auto 10px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .loading-text { color: #00adb5; font-size: 15px; font-weight: bold; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+        .log-box { font-family: monospace; font-size: 12px; color: #00ff66; background: #050505; padding: 12px; border-radius: 6px; text-align: left; max-height: 140px; overflow-y: auto; border: 1px solid #222; margin-top: 10px; line-height: 1.4; }
 
-        #resultContainer { display: none; margin-top: 25px; padding-top: 20px; border-top: 1px solid #333; }
-        audio { width: 100%; outline: none; margin-bottom: 15px; }
-        .download-btn { display: inline-block; background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 14px; }
-        #errorText { background: #331a1a; color: #ff4d4d; padding: 10px; border-radius: 6px; font-size: 14px; margin-top: 15px; display: none; text-align: left; }
+        #resultContainer { display: none; margin-top: 20px; padding: 20px; background: #0f291e; border: 2px solid #00ff66; border-radius: 8px; }
+        audio { width: 100%; outline: none; margin: 10px 0; }
+        .download-btn { display: inline-block; background-color: #00ff66; color: #000; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 14px; }
+        #errorText { background: #2c1518; border: 1px solid #ff4d4d; color: #ff9999; padding: 15px; border-radius: 8px; font-size: 13px; margin-top: 20px; display: none; text-align: left; }
+        
+        .colab-box { background: #1a1a2e; border: 1px solid #e94560; padding: 12px; border-radius: 8px; margin-top: 15px; text-align: left; font-size: 12px; }
+        .code-snippet { background: #000; color: #ffeb3b; padding: 8px; border-radius: 4px; font-family: monospace; font-size: 11px; overflow-x: auto; white-space: pre; margin-top: 5px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Omni Voice Studio 🎙️</h2>
-        <p style="color: #888; font-size: 14px;">100% Gratis - Menggunakan Open-Source AI (Coqui XTTS)</p>
+        <div class="badge">VERSI 3.0 - ANTI ERROR 503</div>
+        <h2>Omni Voice Studio Ultimate 🎙️</h2>
+        <div class="sub">Dilengkapi Radar Pencari Server Aktif Otomatis & M4A-to-WAV Engine</div>
 
+        <!-- PILIH SERVER -->
         <div class="input-group">
-            <label>1. Upload Suara Anda (WAV/MP3, max 10 detik):</label>
-            <input type="file" id="audioInput" accept="audio/*">
+            <label>1. Pilih Jalur Server AI (Otomatis Memindai Server yang Hidup):</label>
+            <select id="serverSelect" onchange="checkServerMode()">
+                <option value="scanning">⏳ Sedang memindai server yang hidup di Hugging Face...</option>
+            </select>
+            <button class="btn-scan" onclick="scanLiveServers()">🔄 Pindai Ulang Server Hidup</button>
+            
+            <div id="customUrlBox" style="display:none; margin-top: 12px;">
+                <label style="color:#ffeb3b;">Masukkan Link Gradio (.gradio.live) atau ID Space:</label>
+                <input type="text" id="customServerUrl" placeholder="Contoh: https://xxxx.gradio.live atau username/space">
+            </div>
         </div>
 
+        <!-- UPLOAD SUARA -->
         <div class="input-group">
-            <label>2. Pilih Bahasa Teks:</label>
-            <select id="langInput">
-                <option value="id">Bahasa Indonesia</option>
+            <label>2. Upload Suara Anda (.m4a, .mp3, .wav - Maks 10 Detik):</label>
+            <input type="file" id="audioInput" accept="audio/*">
+            <div style="font-size: 11px; color: #888; margin-top: 4px;">*File .m4a Anda akan otomatis dikonversi menjadi .wav 16-bit oleh browser.</div>
+        </div>
+
+        <!-- PILIH BAHASA -->
+        <div class="input-group">
+            <label>3. Bahasa & Teks yang Ingin Diucapkan:</label>
+            <select id="langInput" style="margin-bottom: 10px;">
+                <option value="id">Bahasa Indonesia (Jika memakai XTTS / Multi-bahasa)</option>
                 <option value="en">English</option>
             </select>
+            <textarea id="textInput" rows="3">Tahukah kalian film box office Warner Bros. yang menginspirasi Star Wars – yaitu Dune – banyak terinfluence oleh Islam?</textarea>
         </div>
 
-        <div class="input-group">
-            <label>3. Teks yang ingin diucapkan:</label>
-            <textarea id="textInput" rows="4" placeholder="Ketik teks yang ingin diubah menjadi suara Anda..."></textarea>
-        </div>
-
-        <button id="generateBtn">Konversi Audio & Tiru Suaraku</button>
+        <button id="generateBtn" class="btn-main">🚀 Eksekusi & Kloning Suaraku</button>
         
         <!-- AREA LOADING -->
         <div id="loadingArea" class="loading-area">
             <div class="spinner"></div>
-            <div class="loading-text" id="loadingStatus">Mempersiapkan data...</div>
-            <p style="color: #aaa; font-size: 12px; margin-top: 8px;">Proses kloning AI sedang berjalan.<br>Bisa memakan waktu 1-3 menit, mohon jangan tutup halaman ini.</p>
+            <div id="loadingStatus" style="color:#66fcf1; font-weight:bold;">Memulai mesin...</div>
+            <div class="log-box" id="logBox"></div>
         </div>
 
         <!-- AREA ERROR -->
@@ -65,81 +84,229 @@
 
         <!-- AREA HASIL -->
         <div id="resultContainer">
-            <label style="text-align: left; color: #00adb5; display: block; margin-bottom: 10px;">✅ Berhasil! Putar hasil audio Anda:</label>
+            <label style="color: #00ff66; font-size: 16px;">🎉 BERHASIL! Ini Suara Kloning Anda:</label>
             <audio id="audioPlayer" controls></audio>
             <br>
-            <a id="downloadLink" class="download-btn" href="#" download="suara-kloning.wav">⬇️ Download Audio (WAV)</a>
+            <a id="downloadLink" class="download-btn" href="#" download="kloning-suara-berhasil.wav">⬇️ Download Audio (WAV)</a>
+        </div>
+
+        <!-- JALUR DARURAT GOOGLE COLAB -->
+        <div class="colab-box">
+            <b style="color:#e94560;">🛡️ JALUR DARURAT PASTI BERHASIL (Jika Semua Server Publik Sibuk/Error):</b><br>
+            Buka <a href="https://colab.research.google.com" target="_blank" style="color:#66fcf1;">Google Colab</a> (ubah Runtime ke <b>T4 GPU</b>), buat 1 sel kode, paste kode di bawah ini lalu jalankan (Run). Dalam 2 menit, akan muncul link <code>https://xxxx.gradio.live</code>. Copy link itu dan masukkan ke pilihan <b>"Gunakan Link Server Pribadi"</b> di menu nomor 1 di atas!
+            <div class="code-snippet">!pip install -q TTS gradio
+import gradio as gr
+from TTS.api import TTS
+tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2", gpu=True)
+def clone(text, lang, audio):
+    out = "hasil.wav"
+    tts.tts_to_file(text=text, speaker_wav=audio, language=lang, file_path=out)
+    return out
+gr.Interface(fn=clone, inputs=["text", "text", gr.Audio(type="filepath")], outputs="audio").launch(share=True)</div>
         </div>
     </div>
 
-    <!-- Script memanggil Gradio Client -->
     <script type="module">
-        import { client } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
+        import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
 
-        document.getElementById('generateBtn').addEventListener('click', async () => {
-            const audioFile = document.getElementById('audioInput').files[0];
-            const text = document.getElementById('textInput').value;
-            const lang = document.getElementById('langInput').value;
+        function addLog(msg) {
+            const box = document.getElementById('logBox');
+            box.innerHTML += `[${new Date().toLocaleTimeString()}] ${msg}<br>`;
+            box.scrollTop = box.scrollHeight;
+        }
+
+        window.checkServerMode = function() {
+            const val = document.getElementById('serverSelect').value;
+            document.getElementById('customUrlBox').style.display = (val === 'custom') ? 'block' : 'none';
+        }
+
+        // RADAR PEMINDAI SERVER HIDUP DI HUGGING FACE
+        window.scanLiveServers = async function() {
+            const select = document.getElementById('serverSelect');
+            select.innerHTML = `<option value="">⏳ Sedang meradar server RUNNING di Hugging Face...</option>`;
+            try {
+                // Mencari space XTTS dan F5-TTS yang ada di Hugging Face
+                const res1 = await fetch('https://huggingface.co/api/spaces?search=xtts&limit=25');
+                const res2 = await fetch('https://huggingface.co/api/spaces?search=F5-TTS&limit=25');
+                const data = [...(await res1.json()), ...(await res2.json())];
+
+                select.innerHTML = "";
+                let count = 0;
+
+                // Memeriksa status tiap server secara paralel
+                await Promise.all(data.slice(0, 25).map(async (space) => {
+                    try {
+                        const detailRes = await fetch(`https://huggingface.co/api/spaces/${space.id}`);
+                        const detail = await detailRes.json();
+                        // HANYA ambil server yang benar-benar HIDUP (RUNNING) dan memakai Gradio
+                        if (detail.runtime && detail.runtime.stage === "RUNNING" && detail.sdk === "gradio") {
+                            const opt = document.createElement('option');
+                            opt.value = space.id;
+                            opt.text = `🟢 [AKTIF] ${space.id} (👍 ${space.likes || 0})`;
+                            select.appendChild(opt);
+                            count++;
+                        }
+                    } catch (e) {}
+                }));
+
+                // Tambahkan opsi input manual / Colab
+                const customOpt = document.createElement('option');
+                customOpt.value = "custom";
+                customOpt.text = "🛠️ Gunakan Link Google Colab (.gradio.live) / Server Manual";
+                select.appendChild(customOpt);
+
+                if (count === 0) {
+                    select.value = "custom";
+                    window.checkServerMode();
+                }
+            } catch (err) {
+                select.innerHTML = `<option value="custom">🛠️ Gunakan Link Google Colab / Server Manual</option>`;
+                window.checkServerMode();
+            }
+        }
+
+        // Jalankan radar otomatis saat web dibuka
+        window.scanLiveServers();
+
+        // KONVERTER M4A KE WAV MURNI
+        async function convertToWav(file) {
+            addLog(`Membaca file ${file.name} (${Math.round(file.size/1024)} KB)...`);
+            const arrayBuffer = await file.arrayBuffer();
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
             
-            const btn = document.getElementById('generateBtn');
-            const loadingArea = document.getElementById('loadingArea');
-            const loadingStatus = document.getElementById('loadingStatus');
-            const errorText = document.getElementById('errorText');
-            const resultContainer = document.getElementById('resultContainer');
-            const audioPlayer = document.getElementById('audioPlayer');
-            const downloadLink = document.getElementById('downloadLink');
+            // Potong otomatis jika lebih dari 12 detik agar server tidak menolak
+            const maxDuration = Math.min(audioBuffer.duration, 12);
+            const numSamples = Math.floor(maxDuration * audioBuffer.sampleRate);
+            addLog(`Mengonversi ke WAV (Durasi dipakai: ${maxDuration.toFixed(1)} detik)...`);
 
-            // Validasi Input
-            if (!audioFile || !text) {
-                alert("Peringatan: Harap upload file rekaman suara Anda dan ketikkan teks terlebih dahulu!");
+            const length = numSamples * 2 + 44; // Mono 16-bit agar ringan dan cepat
+            const buffer = new ArrayBuffer(length);
+            const view = new DataView(buffer);
+            let pos = 0;
+
+            function setUint16(data) { view.setUint16(pos, data, true); pos += 2; }
+            function setUint32(data) { view.setUint32(pos, data, true); pos += 4; }
+
+            setUint32(0x46464952); setUint32(length - 8); setUint32(0x45564157);
+            setUint32(0x20746d66); setUint32(16); setUint16(1); setUint16(1);
+            setUint32(audioBuffer.sampleRate); setUint32(audioBuffer.sampleRate * 2);
+            setUint16(2); setUint16(16); setUint32(0x61746164); setUint32(length - 44);
+
+            const channelData = audioBuffer.getChannelData(0);
+            for (let i = 0; i < numSamples; i++) {
+                let sample = Math.max(-1, Math.min(1, channelData[i]));
+                sample = (sample < 0 ? sample * 32768 : sample * 32767) | 0;
+                view.setInt16(pos, sample, true);
+                pos += 2;
+            }
+            addLog(`✅ Konversi WAV 16-bit Mono berhasil!`);
+            return new Blob([buffer], { type: "audio/wav" });
+        }
+
+        // EKSEKUSI KLONING SUARA
+        document.getElementById('generateBtn').addEventListener('click', async () => {
+            const rawFile = document.getElementById('audioInput').files[0];
+            const text = document.getElementById('textInput').value.trim();
+            const lang = document.getElementById('langInput').value;
+            let targetServer = document.getElementById('serverSelect').value;
+            if (targetServer === 'custom') {
+                targetServer = document.getElementById('customServerUrl').value.trim();
+            }
+
+            if (!rawFile || !text || !targetServer) {
+                alert("Harap pastikan Server sudah terpilih, file suara sudah diupload, dan teks sudah diisi!");
                 return;
             }
 
-            // Tampilkan Animasi Loading, Sembunyikan Tombol
+            const btn = document.getElementById('generateBtn');
+            const loadingArea = document.getElementById('loadingArea');
+            const errorText = document.getElementById('errorText');
+            const resultContainer = document.getElementById('resultContainer');
+            document.getElementById('logBox').innerHTML = "";
+
             btn.style.display = "none";
             loadingArea.style.display = "block";
             errorText.style.display = "none";
             resultContainer.style.display = "none";
-            
+
             try {
-                loadingStatus.innerText = "Menghubungkan ke Server AI Hugging Face...";
-                
-                // Terhubung ke server
-                const app = await client("coqui/xtts");
-                
-                loadingStatus.innerText = "Server terhubung! AI sedang menyalin suara Anda (antrean server)...";
+                // 1. Ubah M4A ke WAV
+                const wavBlob = await convertToWav(rawFile);
 
-                // Mengirim ke model XTTS
-                const result = await app.predict("/predict", [
-                    text,      
-                    lang,      
-                    audioFile, 
-                    null,      
-                    false,     
-                    true,      
-                    false,     
-                ]);
+                // 2. Koneksi ke Server
+                addLog(`Menghubungi server: ${targetServer}...`);
+                const app = await Client.connect(targetServer);
+                addLog(`✅ Terhubung! Membaca struktur pintu API server...`);
 
-                // Mengambil URL hasil
-                const audioUrl = result.data[0].url;
-                audioPlayer.src = audioUrl;
-                downloadLink.href = audioUrl;
+                // 3. Auto-Mapper Pintar: Membaca apa yang diminta oleh server tersebut
+                const apiInfo = await app.view_api();
+                const endpoints = Object.keys(apiInfo.named_endpoints);
+                const endpoint = endpoints.length > 0 ? endpoints[0] : 0;
+                addLog(`Menggunakan endpoint: ${endpoint}`);
+
+                let result;
+                // Jika memakai server pribadi dari Google Colab kita di bawah
+                if (targetServer.includes("gradio.live")) {
+                    addLog(`Mendeteksi Server Pribadi Colab! Mengirim paket data...`);
+                    result = await app.predict(endpoint, [text, lang, wavBlob]);
+                } else {
+                    // Memetakan parameter secara otomatis untuk server publik Hugging Face
+                    const params = apiInfo.named_endpoints[endpoint]?.parameters || [];
+                    const args = params.map(p => {
+                        const label = (p.label || p.parameter_name || "").toLowerCase();
+                        const comp = (p.component || "").toLowerCase();
+                        if (comp.includes("audio") || label.includes("audio") || label.includes("wav") || label.includes("speaker") || label.includes("ref")) {
+                            return wavBlob;
+                        }
+                        if (label.includes("lang")) {
+                            return lang;
+                        }
+                        if (comp.includes("checkbox") || p.type === "boolean") {
+                            return p.parameter_default !== undefined ? p.parameter_default : false;
+                        }
+                        if (comp.includes("slider") || comp.includes("number")) {
+                            return p.parameter_default !== undefined ? p.parameter_default : 1.0;
+                        }
+                        if (label.includes("ref_text") || label.includes("reference text")) {
+                            return ""; // Kosongkan agar ditranskrip otomatis oleh AI
+                        }
+                        return text;
+                    });
+
+                    addLog(`Mengirim ${args.length} parameter ke mesin AI (Tunggu 30-90 detik)...`);
+                    result = await app.predict(endpoint, args.length ? args : [wavBlob, "", text, false]);
+                }
+
+                addLog(`✅ Paket balasan diterima dari AI!`);
+
+                // 4. Cari file audio di dalam balasan server
+                let audioUrl = null;
+                const findUrl = (obj) => {
+                    if (!obj) return;
+                    if (typeof obj === 'string' && (obj.startsWith('http') || obj.startsWith('data:audio'))) audioUrl = obj;
+                    else if (obj.url) audioUrl = obj.url;
+                    else if (Array.isArray(obj)) obj.forEach(findUrl);
+                    else if (typeof obj === 'object') Object.values(obj).forEach(findUrl);
+                };
+                findUrl(result.data);
+
+                if (!audioUrl) throw new Error("Server merespons, tetapi tidak menghasilkan file audio. Coba pilih server [AKTIF] lainnya di daftar nomor 1.");
+
+                document.getElementById('audioPlayer').src = audioUrl;
+                document.getElementById('downloadLink').href = audioUrl;
                 
-                // Sembunyikan Loading, Tampilkan Hasil
                 loadingArea.style.display = "none";
                 resultContainer.style.display = "block";
-                
-                // Kembalikan tombol
                 btn.style.display = "block";
-                btn.innerText = "Buat Suara Lagi";
-                
-            } catch (error) {
-                console.error(error);
-                // Sembunyikan Loading, Tampilkan Error
+                btn.innerText = "🚀 Buat Suara Lagi";
+
+            } catch (err) {
+                console.error(err);
                 loadingArea.style.display = "none";
                 btn.style.display = "block";
                 errorText.style.display = "block";
-                errorText.innerHTML = `<b>❌ Gagal memproses:</b> Server AI publik mungkin sedang offline atau terlalu banyak antrean.<br><br><b>Detail teknis:</b> ${error.message}<br><br><i>Saran: Coba perkecil ukuran file rekaman suara Anda (maksimal 5 detik) atau coba lagi dalam beberapa menit.</i>`;
+                errorText.innerHTML = `<b>❌ Gagal pada server "${targetServer}":</b><br>${err.message}<br><br><b>💡 Solusi Pasti Berhasil:</b><br>1. Ganti pilihan di menu nomor 1 ke <b>Server 🟢 [AKTIF]</b> urutan berikutnya.<br>2. Atau gunakan <b>Jalur Darurat Google Colab</b> di kotak paling bawah halaman ini (dijamin 100% berhasil tanpa antrean karena memakai mesin pribadi Anda).`;
             }
         });
     </script>
